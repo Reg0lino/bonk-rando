@@ -66,7 +66,7 @@
         /* CRT Display Box */
         .display-unit {
             background: #050505;
-            height: 400px;
+            height: 420px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -215,12 +215,28 @@
     </div>
 
     <script>
-        // Roster matches filenames exactly from list.txt
+        // Roster object: UI Name vs Internal Filename
         const roster = [
-            "Amog", "Athena", "Bandit", "Birdo", "Bush", "Calcium", "CL4NK", 
-            "Dicehead", "fox", "Megachad", "Monke", "Ninja", "Noelle", 
-            "Ogre", "Roberto", "Robinette", "SirChadwell", "SirOofie", 
-            "Spaceman", "TonyMcZoom"
+            { display: "Amog", file: "Amog" },
+            { display: "Athena", file: "Athena" },
+            { display: "Bandit", file: "Bandit" },
+            { display: "Birdo", file: "Birdo" },
+            { display: "Bush", file: "Bush" },
+            { display: "Calcium", file: "Calcium" },
+            { display: "CL4NK", file: "CL4NK" },
+            { display: "Dicehead", file: "Dicehead" },
+            { display: "fox", file: "fox" },
+            { display: "Megachad", file: "Megachad" },
+            { display: "Monke", file: "Monke" },
+            { display: "Ninja", file: "Ninja" },
+            { display: "Noelle", file: "Noelle" },
+            { display: "Ogre", file: "Ogre" },
+            { display: "Roberto", file: "Roberto" },
+            { display: "Robinette", file: "Robinette" },
+            { display: "Sir Chadwell", file: "SirChadwell" },
+            { display: "Sir Oofie", file: "SirOofie" },
+            { display: "Spaceman", file: "Spaceman" },
+            { display: "Tony McZoom", file: "TonyMcZoom" }
         ];
 
         const nameDisplay = document.getElementById('char-name');
@@ -261,11 +277,11 @@
             const totalCycles = 25;
 
             const interval = setInterval(() => {
-                const char = roster[Math.floor(Math.random() * roster.length)];
-                const ext = (char === "Roberto") ? ".png" : ".webp";
+                const unit = roster[Math.floor(Math.random() * roster.length)];
+                const ext = (unit.file === "Roberto") ? ".png" : ".webp";
                 
-                nameDisplay.innerText = char;
-                imgDisplay.src = "images/" + char + ext;
+                nameDisplay.innerText = unit.display;
+                imgDisplay.src = "images/" + unit.file + ext;
                 nameDisplay.classList.add('glitch');
                 screen.style.borderColor = (counter % 2 === 0) ? "var(--accent)" : "#222";
                 
@@ -281,10 +297,10 @@
 
         function finalize() {
             const final = roster[Math.floor(Math.random() * roster.length)];
-            const ext = (final === "Roberto") ? ".png" : ".webp";
+            const ext = (final.file === "Roberto") ? ".png" : ".webp";
             
-            nameDisplay.innerText = final;
-            imgDisplay.src = "images/" + final + ext;
+            nameDisplay.innerText = final.display;
+            imgDisplay.src = "images/" + final.file + ext;
             nameDisplay.classList.remove('glitch');
             screen.style.borderColor = "var(--secondary)";
 
@@ -293,13 +309,14 @@
             void flashDiv.offsetWidth; 
             flashDiv.classList.add('do-flash');
 
-            // Sound
+            // Lock-in Sound
             playSound(523, 'triangle', 0.2); 
             setTimeout(() => playSound(880, 'triangle', 0.4), 100); 
 
-            // Links setup
-            document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=megabonk+${final}+guide`;
-            document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=megabonk+${final}+guide`;
+            // Link generation
+            const searchTerms = encodeURIComponent(`megabonk ${final.display} guide`);
+            document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=${searchTerms}`;
+            document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=${searchTerms}`;
             linksDiv.style.opacity = "1";
             
             isSpinning = false;
