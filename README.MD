@@ -2,7 +2,7 @@
 
 A high-fidelity, retro-future character randomizer terminal built for the MEGABONK roster. This tool features 8-bit synthesized audio, CRT visual effects, and dynamic research link generation for YouTube and Reddit.
 
-**Live Demo:** [https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/)
+**Live Demo:** [https://reg0lino.github.io/bonk-rando/](https://reg0lino.github.io/bonk-rando/)
 
 ## 🛠 Features
 
