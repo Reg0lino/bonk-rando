@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEGABONK // SYSTEM_2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg: #0a0a0c;
+            --panel: #15151a;
+            --accent: #ff0055;
+            --secondary: #00f2ff;
+            --text: #e0e0e0;
+            --border: #33333d;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 150%),
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 100%, 100% 4px;
+        }
+
+        /* Flash Overlay */
+        #flash {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .terminal {
+            width: 450px;
+            background: var(--panel);
+            border: 2px solid var(--border);
+            box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 15px var(--accent);
+            position: relative;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 4px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        /* CRT Display Box */
+        .display-unit {
+            background: #050505;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #222;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 40px rgba(0, 242, 255, 0.05);
+        }
+
+        /* CRT Scanlines Overlay */
+        .display-unit::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Moving Scanner Line */
+        .scanner-bar {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 242, 255, 0.3);
+            position: absolute;
+            top: 0;
+            z-index: 4;
+            box-shadow: 0 0 10px var(--secondary);
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .img-frame {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            z-index: 2;
+        }
+
+        #char-img {
+            max-height: 100%;
+            filter: drop-shadow(0 0 10px var(--secondary));
+            image-rendering: pixelated;
+        }
+
+        #char-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin: 15px 0;
+            height: 45px;
+            z-index: 2;
+            text-shadow: 0 0 10px var(--secondary);
+        }
+
+        /* Guide Links Section */
+        .links-container {
+            display: flex;
+            gap: 15px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 10;
+            margin-top: 10px;
+        }
+
+        .guide-link {
+            font-size: 11px;
+            color: #000;
+            background: var(--secondary);
+            padding: 8px 12px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: transform 0.1s;
+        }
+
+        .guide-link:hover { 
+            background: #fff; 
+            transform: scale(1.05);
+        }
+
+        .bonk-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            cursor: pointer;
+            width: 100%;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+            box-shadow: 0 6px 0 #80002a;
+            font-size: 1.1rem;
+        }
+
+        .bonk-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #80002a; }
+
+        /* Animations */
+        @keyframes flash-anim {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .do-flash { animation: flash-anim 0.5s ease-out forwards; }
+
+        .glitch { animation: glitch-anim 0.1s infinite; }
+        @keyframes glitch-anim {
+            0% { transform: translate(2px, -2px); filter: hue-rotate(90deg); }
+            50% { transform: translate(-2px, 2px); filter: hue-rotate(0deg); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="flash"></div>
+
+    <div class="terminal">
+        <div class="header">MEGABONK // 2026</div>
+        
+        <div class="display-unit" id="screen">
+            <div class="scanner-bar"></div>
+            
+            <div class="img-frame">
+                <img id="char-img" src="" style="display:none;">
+            </div>
+
+            <div id="char-name">UNIT_OFFLINE</div>
+
+            <div class="links-container" id="links">
+                <a id="yt-link" href="#" target="_blank" class="guide-link">YouTube Guide</a>
+                <a id="rd-link" href="#" target="_blank" class="guide-link">Reddit Intel</a>
+            </div>
+        </div>
+
+        <button class="bonk-btn" onclick="randomize()">INITIATE ROLL</button>
+    </div>
+
+    <script>
+        // Roster matches filenames exactly from list.txt
+        const roster = [
+            "Amog", "Athena", "Bandit", "Birdo", "Bush", "Calcium", "CL4NK", 
+            "Dicehead", "fox", "Megachad", "Monke", "Ninja", "Noelle", 
+            "Ogre", "Roberto", "Robinette", "SirChadwell", "SirOofie", 
+            "Spaceman", "TonyMcZoom"
+        ];
+
+        const nameDisplay = document.getElementById('char-name');
+        const imgDisplay = document.getElementById('char-img');
+        const linksDiv = document.getElementById('links');
+        const flashDiv = document.getElementById('flash');
+        const screen = document.getElementById('screen');
+        
+        let audioCtx = null;
+        let isSpinning = false;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        function playSound(freq, type, duration) {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function randomize() {
+            if (isSpinning) return;
+            initAudio();
+            isSpinning = true;
+            linksDiv.style.opacity = "0";
+            imgDisplay.style.display = "block";
+            
+            let counter = 0;
+            const totalCycles = 25;
+
+            const interval = setInterval(() => {
+                const char = roster[Math.floor(Math.random() * roster.length)];
+                const ext = (char === "Roberto") ? ".png" : ".webp";
+                
+                nameDisplay.innerText = char;
+                imgDisplay.src = "images/" + char + ext;
+                nameDisplay.classList.add('glitch');
+                screen.style.borderColor = (counter % 2 === 0) ? "var(--accent)" : "#222";
+                
+                playSound(150 + (counter * 25), 'square', 0.05);
+                
+                counter++;
+                if (counter > totalCycles) {
+                    clearInterval(interval);
+                    finalize();
+                }
+            }, 70);
+        }
+
+        function finalize() {
+            const final = roster[Math.floor(Math.random() * roster.length)];
+            const ext = (final === "Roberto") ? ".png" : ".webp";
+            
+            nameDisplay.innerText = final;
+            imgDisplay.src = "images/" + final + ext;
+            nameDisplay.classList.remove('glitch');
+            screen.style.borderColor = "var(--secondary)";
+
+            // Photon Flash
+            flashDiv.classList.remove('do-flash');
+            void flashDiv.offsetWidth; 
+            flashDiv.classList.add('do-flash');
+
+            // Sound
+            playSound(523, 'triangle', 0.2); 
+            setTimeout(() => playSound(880, 'triangle', 0.4), 100); 
+
+            // Links setup
+            document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=megabonk+${final}+guide`;
+            document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=megabonk+${final}+guide`;
+            linksDiv.style.opacity = "1";
+            
+            isSpinning = false;
+        }
+    </script>
+</body>
+</html>
