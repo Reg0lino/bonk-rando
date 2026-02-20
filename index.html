@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEGABONK // SYSTEM_2026</title>
+    <title>MEGABONK RANDOMIZER</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
@@ -14,6 +14,8 @@
             --secondary: #00f2ff;
             --text: #e0e0e0;
             --border: #33333d;
+            --buff: #00ff00;
+            --nerf: #ff3333;
         }
 
         body {
@@ -32,7 +34,6 @@
             background-size: 100% 100%, 100% 4px;
         }
 
-        /* Flash Overlay */
         #flash {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -43,42 +44,60 @@
         }
 
         .terminal {
-            width: 450px;
+            width: 90%;
+            max-width: 450px;
             background: var(--panel);
             border: 2px solid var(--border);
             box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 15px var(--accent);
             position: relative;
             padding: 25px;
             text-align: center;
+            box-sizing: border-box;
+            max-height: 98vh;
+            overflow-y: auto;
         }
 
-        .header {
+        .terminal::-webkit-scrollbar { width: 5px; }
+        .terminal::-webkit-scrollbar-thumb { background: var(--border); }
+
+        .header-logo-container {
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .header-logo-img {
+            max-width: 80%;
+            height: auto;
+            filter: drop-shadow(0 0 10px var(--accent));
+        }
+
+        .header-subtitle {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            font-size: 1.4rem;
-            letter-spacing: 4px;
-            color: var(--accent);
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
+            font-size: 1.1rem;
+            letter-spacing: 10px;
+            color: var(--secondary);
+            margin-top: 8px;
+            text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
         }
 
-        /* CRT Display Box */
         .display-unit {
             background: #050505;
-            height: 420px;
+            height: 480px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             border: 2px solid #222;
-            margin: 20px 0;
+            margin: 15px 0;
             position: relative;
             overflow: hidden;
             box-shadow: inset 0 0 40px rgba(0, 242, 255, 0.05);
+            padding: 15px;
+            box-sizing: border-box;
         }
 
-        /* CRT Scanlines Overlay */
         .display-unit::after {
             content: "";
             position: absolute;
@@ -89,7 +108,6 @@
             z-index: 5;
         }
 
-        /* Moving Scanner Line */
         .scanner-bar {
             width: 100%;
             height: 2px;
@@ -101,18 +119,16 @@
             animation: scan 4s linear infinite;
         }
 
-        @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
-        }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
 
         .img-frame {
-            height: 200px;
+            height: 180px; /* Adjusted to fit stats better */
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             z-index: 2;
+            margin-top: 10px;
         }
 
         #char-img {
@@ -123,68 +139,86 @@
 
         #char-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             color: var(--secondary);
-            margin: 15px 0;
-            height: 45px;
+            margin: 10px 0;
             z-index: 2;
-            text-shadow: 0 0 10px var(--secondary);
         }
 
-        /* Guide Links Section */
-        .links-container {
-            display: flex;
-            gap: 15px;
-            opacity: 0;
-            transition: opacity 0.5s;
-            z-index: 10;
-            margin-top: 10px;
-        }
-
-        .guide-link {
+        .stats-board {
+            width: 100%;
+            text-align: left;
+            padding: 5px 10px;
+            box-sizing: border-box;
             font-size: 11px;
+            z-index: 2;
+            display: none;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #222;
+            flex-grow: 1;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stats-header {
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 5px;
+            border-bottom: 1px dashed var(--secondary);
+            padding-bottom: 2px;
+        }
+
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+        .stat-name { color: #aaa; }
+        .stat-val-group { display: flex; gap: 4px; }
+        .stat-base { color: #fff; }
+        .stat-mod.buff { color: var(--buff); }
+        .stat-mod.nerf { color: var(--nerf); }
+
+        .links-container { display: flex; gap: 10px; opacity: 0; z-index: 10; margin-top: auto; padding-top: 10px; }
+        .guide-link {
+            font-size: 10px;
             color: #000;
             background: var(--secondary);
-            padding: 8px 12px;
+            padding: 6px 10px;
             text-decoration: none;
             font-weight: 900;
-            text-transform: uppercase;
             clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-            transition: transform 0.1s;
-        }
-
-        .guide-link:hover { 
-            background: #fff; 
-            transform: scale(1.05);
         }
 
         .bonk-btn {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 18px;
+            padding: 15px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
             cursor: pointer;
             width: 100%;
             clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
-            box-shadow: 0 6px 0 #80002a;
-            font-size: 1.1rem;
+            box-shadow: 0 4px 0 #80002a;
+            margin-bottom: 10px;
         }
 
-        .bonk-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #80002a; }
+        .bonk-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #80002a; }
 
-        /* Animations */
-        @keyframes flash-anim {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+        .dropdown-select {
+            width: 100%;
+            background: #050505;
+            color: var(--secondary);
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 10px;
+            cursor: pointer;
         }
+
         .do-flash { animation: flash-anim 0.5s ease-out forwards; }
-
+        @keyframes flash-anim { 0% { opacity: 1; } 100% { opacity: 0; } }
         .glitch { animation: glitch-anim 0.1s infinite; }
         @keyframes glitch-anim {
-            0% { transform: translate(2px, -2px); filter: hue-rotate(90deg); }
-            50% { transform: translate(-2px, 2px); filter: hue-rotate(0deg); }
+            0% { transform: translate(1px, -1px); }
+            50% { transform: translate(-1px, 1px); }
             100% { transform: translate(0); }
         }
     </style>
@@ -194,17 +228,15 @@
     <div id="flash"></div>
 
     <div class="terminal">
-        <div class="header">MEGABONK // 2026</div>
+        <div class="header-logo-container">
+            <img src="images/logo.png" alt="MEGABONK Logo" class="header-logo-img">
+            <div class="header-subtitle">RANDOMIZER</div>
+        </div>
         
         <div class="display-unit" id="screen">
-            <div class="scanner-bar"></div>
-            
-            <div class="img-frame">
-                <img id="char-img" src="" style="display:none;">
-            </div>
-
+            <div class="img-frame"><img id="char-img" src="" style="display:none;"></div>
             <div id="char-name">UNIT_OFFLINE</div>
-
+            <div class="stats-board" id="stats-board"></div>
             <div class="links-container" id="links">
                 <a id="yt-link" href="#" target="_blank" class="guide-link">YouTube Guide</a>
                 <a id="rd-link" href="#" target="_blank" class="guide-link">Reddit Intel</a>
@@ -212,31 +244,34 @@
         </div>
 
         <button class="bonk-btn" onclick="randomize()">INITIATE ROLL</button>
+        <select class="dropdown-select" id="manual-select">
+            <option value="" selected disabled>-- MANUAL OVERRIDE --</option>
+        </select>
     </div>
 
     <script>
-        // Roster object: UI Name vs Internal Filename
         const roster = [
-            { display: "Amog", file: "Amog" },
-            { display: "Athena", file: "Athena" },
-            { display: "Bandit", file: "Bandit" },
-            { display: "Birdo", file: "Birdo" },
-            { display: "Bush", file: "Bush" },
-            { display: "Calcium", file: "Calcium" },
-            { display: "CL4NK", file: "CL4NK" },
-            { display: "Dicehead", file: "Dicehead" },
-            { display: "Fox", file: "fox" },
-            { display: "Megachad", file: "Megachad" },
-            { display: "Monke", file: "Monke" },
-            { display: "Ninja", file: "Ninja" },
-            { display: "Noelle", file: "Noelle" },
-            { display: "Ogre", file: "Ogre" },
-            { display: "Roberto", file: "Roberto" },
-            { display: "Robinette", file: "Robinette" },
-            { display: "Sir Chadwell", file: "SirChadwell" },
-            { display: "Sir Oofie", file: "SirOofie" },
-            { display: "Spaceman", file: "Spaceman" },
-            { display: "Tony McZoom", file: "TonyMcZoom" }
+            { display: "Amog", file: "Amog", stats: [{name:"Max HP",base:"130",mod:"(+30)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Duration",base:"1.2x",mod:"(+0.2)"},{name:"Size",base:"1.2x",mod:"(+0.2)"},{name:"Armor",base:"10%",mod:"(10%)"}]},
+            { display: "Athena", file: "Athena", stats: [{name:"Max HP",base:"125",mod:"(+25)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"15%",mod:"(15%)"},{name:"Thorns",base:"5",mod:"(+5)"}]},
+            { display: "Bandit", file: "Bandit", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.05x",mod:"(5%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"11%",mod:"(10%)"}]},
+            { display: "Birdo", file: "Birdo", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.05x",mod:"(5%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Extra Jumps",base:"1",mod:"(+1)"}]},
+            { display: "Bush", file: "Bush", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"11",mod:"(+6)"},{name:"Evasion",base:"11%",mod:"(10%)"}]},
+            { display: "Calcium", file: "Calcium", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.15x",mod:"(15%)"},{name:"Jump",base:"9",mod:"(+1.5)"},{name:"Pickup",base:"8",mod:"(+3)"}]},
+            { display: "CL4NK", file: "CL4NK", stats: [{name:"Max HP",base:"40",mod:"(-60)"},{name:"Speed",base:"1.07x",mod:"(7%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Shield",base:"50",mod:"(+50)"}]},
+            { display: "Dicehead", file: "Dicehead", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Crit",base:"6%",mod:"(5%)"},{name:"Gold",base:"1.1x",mod:"(+0.1)"}]},
+            { display: "Fox", file: "fox", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(4%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Luck",base:"15%",mod:"(15%)"}]},
+            { display: "Megachad", file: "Megachad", stats: [{name:"Max HP",base:"120",mod:"(+20)"},{name:"Speed",base:"0.95x",mod:"(-5%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"5",mod:""}]},
+            { display: "Monke", file: "Monke", stats: [{name:"Max HP",base:"135",mod:"(+35)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"9",mod:"(+1)"},{name:"Pickup",base:"5",mod:""},{name:"Damage",base:"1.2x",mod:"(+0.2)"}]},
+            { display: "Ninja", file: "Ninja", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.15x",mod:"(15%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Evasion",base:"6%",mod:"(5%)"}]},
+            { display: "Noelle", file: "Noelle", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.08x",mod:"(+0.1)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"}]},
+            { display: "Ogre", file: "Ogre", stats: [{name:"Max HP",base:"140",mod:"(+40)"},{name:"Speed",base:"0.94x",mod:"(-6%)"},{name:"Jump",base:"7",mod:"(+0.4)"},{name:"Pickup",base:"5",mod:""},{name:"Damage",base:"1.1x",mod:"(10%)"},{name:"Luck",base:"-1%",mod:"(-1%)"},{name:"Armor",base:"5%",mod:"(5%)"}]},
+            { display: "Roberto", file: "Roberto", ext: ".png", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(4%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"16%",mod:"(15%)"}]},
+            { display: "Robinette", file: "Robinette", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.08x",mod:"(7.5%)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Gold",base:"1.1x",mod:"(+0.1)"}]},
+            { display: "Sir Chadwell", file: "SirChadwell", stats: [{name:"Max HP",base:"150",mod:"(+50)"},{name:"Speed",base:"0.97x",mod:"(-3%)"},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"20%",mod:"(20%)"},{name:"Difficulty",base:"10%",mod:"(10%)"}]},
+            { display: "Sir Oofie", file: "SirOofie", stats: [{name:"Max HP",base:"150",mod:"(+50)"},{name:"Speed",base:"0.98x",mod:"(-2%)"},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"15%",mod:"(15%)"}]},
+            { display: "Spaceman", file: "Spaceman", stats: [{name:"Max HP",base:"110",mod:"(+10)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"XP Gain",base:"1.1x",mod:"(+0.1)"}]},
+            { display: "Tony McZoom", file: "TonyMcZoom", stats: [{name:"Max HP",base:"70",mod:"(-30)"},{name:"Speed",base:"1.30x",mod:"(30%)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Shield",base:"10",mod:"(+10)"}]},
+            { display: "Vlad", file: "Vlad", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(+0)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Lifesteal",base:"5%",mod:"(5%)"}]}
         ];
 
         const nameDisplay = document.getElementById('char-name');
@@ -244,13 +279,25 @@
         const linksDiv = document.getElementById('links');
         const flashDiv = document.getElementById('flash');
         const screen = document.getElementById('screen');
-        
+        const statsBoard = document.getElementById('stats-board');
+        const manualSelect = document.getElementById('manual-select');
         let audioCtx = null;
         let isSpinning = false;
 
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
+        roster.forEach((char, index) => {
+            let opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = char.display;
+            manualSelect.appendChild(opt);
+        });
+
+        manualSelect.addEventListener('change', (e) => {
+            if(e.target.value === "" || isSpinning) return;
+            initAudio();
+            finalize(roster[e.target.value]);
+        });
+
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
         function playSound(freq, type, duration) {
             if(!audioCtx) return;
@@ -258,67 +305,64 @@
             const gain = audioCtx.createGain();
             osc.type = type;
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function buildStatsHTML(statsArray) {
+            let html = '<div class="stats-header">Character stats</div>';
+            statsArray.forEach(s => {
+                let modClass = s.mod.includes('-') ? 'nerf' : 'buff';
+                html += `<div class="stat-row">
+                    <span class="stat-name">${s.name}:</span>
+                    <div class="stat-val-group">
+                        <span class="stat-base">${s.base}</span>
+                        <span class="stat-mod ${modClass}">${s.mod}</span>
+                    </div>
+                </div>`;
+            });
+            return html;
         }
 
         function randomize() {
             if (isSpinning) return;
             initAudio();
             isSpinning = true;
+            manualSelect.value = "";
             linksDiv.style.opacity = "0";
+            statsBoard.style.display = "none";
             imgDisplay.style.display = "block";
-            
             let counter = 0;
-            const totalCycles = 25;
-
             const interval = setInterval(() => {
                 const unit = roster[Math.floor(Math.random() * roster.length)];
-                const ext = (unit.file === "Roberto") ? ".png" : ".webp";
-                
                 nameDisplay.innerText = unit.display;
-                imgDisplay.src = "images/" + unit.file + ext;
+                imgDisplay.src = "images/" + unit.file + (unit.ext || ".webp");
                 nameDisplay.classList.add('glitch');
-                screen.style.borderColor = (counter % 2 === 0) ? "var(--accent)" : "#222";
-                
-                playSound(150 + (counter * 25), 'square', 0.05);
-                
-                counter++;
-                if (counter > totalCycles) {
+                playSound(150 + (counter * 20), 'square', 0.05);
+                if (++counter > 20) {
                     clearInterval(interval);
-                    finalize();
+                    finalize(roster[Math.floor(Math.random() * roster.length)]);
                 }
             }, 70);
         }
 
-        function finalize() {
-            const final = roster[Math.floor(Math.random() * roster.length)];
-            const ext = (final.file === "Roberto") ? ".png" : ".webp";
-            
-            nameDisplay.innerText = final.display;
-            imgDisplay.src = "images/" + final.file + ext;
+        function finalize(lockedUnit) {
+            imgDisplay.style.display = "block";
+            nameDisplay.innerText = lockedUnit.display;
+            imgDisplay.src = "images/" + lockedUnit.file + (lockedUnit.ext || ".webp");
             nameDisplay.classList.remove('glitch');
-            screen.style.borderColor = "var(--secondary)";
-
-            // Photon Flash
+            statsBoard.innerHTML = buildStatsHTML(lockedUnit.stats);
+            statsBoard.style.display = "flex";
             flashDiv.classList.remove('do-flash');
-            void flashDiv.offsetWidth; 
+            void flashDiv.offsetWidth;
             flashDiv.classList.add('do-flash');
-
-            // Lock-in Sound
-            playSound(523, 'triangle', 0.2); 
-            setTimeout(() => playSound(880, 'triangle', 0.4), 100); 
-
-            // Link generation
-            const searchTerms = encodeURIComponent(`megabonk ${final.display} guide`);
+            playSound(523, 'triangle', 0.2);
+            const searchTerms = encodeURIComponent(`megabonk ${lockedUnit.display} guide`);
             document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=${searchTerms}`;
             document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=${searchTerms}`;
             linksDiv.style.opacity = "1";
-            
             isSpinning = false;
         }
     </script>
