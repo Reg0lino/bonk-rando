@@ -91,6 +91,17 @@
             z-index: 20;
             opacity: 0.6;
         }
+        .discord-link {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            z-index: 5px;
+        }
+        .icon-discord {
+            width: 50px;
+            height: 50px;
+            display: block;
+        }
 
         .header-logo-container {
             margin-bottom: 2px;
@@ -297,7 +308,10 @@
     </div>
 
     <div class="terminal">
-        <button class="fs-toggle" onclick="toggleFullScreen()">⛶</button>
+        <button class="fs-toggle" onclick="toggleFullScreen()" title="Toggle fullscreen">⛶</button>
+        <a id="discord-link" class="discord-link" href="https://discord.com/invite/BGxud7HPEe" target="_blank" title="Join the Megabonk Discord">
+            <img src="images/discord.webp" alt="Discord" class="icon-discord">
+        </a>
         
         <div class="header-logo-container">
             <img src="images/logo.png" alt="MEGABONK Logo" class="header-logo-img">
@@ -305,32 +319,32 @@
         </div>
         
         <div class="display-unit" id="screen">
-            <div class="img-frame clickable-zone" onclick="showDetail('img')">
+            <div class="img-frame clickable-zone" onclick="showDetail('img')" title="View character image">
                 <img id="char-img" src="" style="display:none;">
             </div>
             <div id="char-name">Roll For Random Character</div>
             
-            <div id="weapon-block" class="info-block clickable-zone" onclick="showDetail('weapon')">
+            <div id="weapon-block" class="info-block clickable-zone" onclick="showDetail('weapon')" title="See weapon details">
                 <span class="info-label">Primary Weapon</span>
                 <span id="weapon-name" class="info-title">---</span>
                 <span id="weapon-desc" class="info-desc">---</span>
             </div>
 
-            <div id="passive-block" class="info-block clickable-zone" onclick="showDetail('passive')">
+            <div id="passive-block" class="info-block clickable-zone" onclick="showDetail('passive')" title="See passive ability details">
                 <span class="info-label">Passive Ability</span>
                 <span id="passive-name" class="info-title">---</span>
                 <span id="passive-desc" class="info-desc">---</span>
             </div>
 
-            <div class="stats-board clickable-zone" id="stats-board" onclick="showDetail('stats')"></div>
+            <div class="stats-board clickable-zone" id="stats-board" onclick="showDetail('stats')" title="View full character stats"></div>
             
             <div class="links-container" id="links">
-                <a id="yt-link" href="#" target="_blank" class="guide-link">YOUTUBE</a>
-                <a id="rd-link" href="#" target="_blank" class="guide-link">REDDIT</a>
+                <a id="yt-link" href="#" target="_blank" class="guide-link" title="Character Guide Search on YouTube">YOUTUBE</a>
+                <a id="rd-link" href="#" target="_blank" class="guide-link" title="Character Guide Search on Reddit">REDDIT</a>
             </div>
         </div>
 
-        <button class="bonk-btn" onclick="randomize()">ROLL</button>
+        <button class="bonk-btn" onclick="randomize()" title="Randomly choose character">ROLL</button>
         <select class="dropdown-select" id="manual-select">
             <option value="" selected disabled>Select Character</option>
         </select>
