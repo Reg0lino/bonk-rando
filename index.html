@@ -468,9 +468,10 @@
             flashDiv.classList.add('do-flash');
             playSound(523, 'triangle', 0.2);
             
-            const searchTerms = encodeURIComponent(`megabonk ${lockedUnit.display} guide`);
-            document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=${searchTerms}`;
-            document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=${searchTerms}`;
+            const searchTermsYt = encodeURIComponent(`megabonk "${lockedUnit.display}" guide`);
+            const searchTermsRd = encodeURIComponent(`megabonk ${lockedUnit.display} guide`);
+            document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=${searchTermsYt}`;
+            document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=${searchTermsRd}`;
             linksDiv.style.opacity = "1";
             isSpinning = false;
         }
