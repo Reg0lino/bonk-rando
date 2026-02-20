@@ -25,9 +25,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             background-image: 
                 radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 150%),
                 linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
@@ -44,30 +44,43 @@
         }
 
         .terminal {
-            width: 90%;
+            width: 95%;
             max-width: 450px;
             background: var(--panel);
             border: 2px solid var(--border);
             box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 15px var(--accent);
             position: relative;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             box-sizing: border-box;
-            max-height: 98vh;
-            overflow-y: auto;
+            margin: 10px;
         }
 
-        .terminal::-webkit-scrollbar { width: 5px; }
-        .terminal::-webkit-scrollbar-thumb { background: var(--border); }
+        /* Fullscreen Button */
+        .fs-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--secondary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            padding: 5px;
+            cursor: pointer;
+            z-index: 20;
+            opacity: 0.6;
+        }
+        .fs-toggle:hover { opacity: 1; border-color: var(--secondary); }
 
         .header-logo-container {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             border-bottom: 2px solid var(--border);
-            padding-bottom: 15px;
+            padding-bottom: 10px;
         }
 
         .header-logo-img {
-            max-width: 80%;
+            max-width: 60%;
             height: auto;
             filter: drop-shadow(0 0 10px var(--accent));
         }
@@ -75,47 +88,37 @@
         .header-subtitle {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            font-size: 1.1rem;
-            letter-spacing: 10px;
+            font-size: 0.9rem;
+            letter-spacing: 6px;
             color: var(--secondary);
-            margin-top: 8px;
+            margin-top: 5px;
             text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
         }
 
         .display-unit {
             background: #050505;
-            height: 455px; /* <--- ADJUST HEIGHT HERE: Increase if content cuts off, decrease if too tall for screen */
+            min-height: 480px;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
             border: 2px solid #222;
-            margin: 15px 0;
+            margin: 10px 0;
             position: relative;
             overflow: hidden;
             box-shadow: inset 0 0 40px rgba(0, 242, 255, 0.05);
-            padding: 15px;
+            padding: 12px;
             box-sizing: border-box;
         }
 
-        .display-unit::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 5;
-        }
-
         .img-frame {
-            height: 180px; /* Adjusted to fit stats better */
+            height: 110px; /* Reduced to fit more info */
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             z-index: 2;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         #char-img {
@@ -126,32 +129,62 @@
 
         #char-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--secondary);
-            margin: 10px 0;
+            margin: 8px 0;
             z-index: 2;
+            text-transform: uppercase;
+        }
+
+        /* Weapon & Passive Sections */
+        .info-block {
+            width: 100%;
+            text-align: left;
+            font-size: 11px;
+            margin-bottom: 8px;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 2px solid var(--accent);
+            box-sizing: border-box;
+            display: none; /* Shown on finalize */
+        }
+        .info-label {
+            color: var(--accent);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 9px;
+            margin-bottom: 2px;
+            display: block;
+        }
+        .info-title {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 2px;
+            display: block;
+        }
+        .info-desc {
+            color: #bbb;
+            line-height: 1.2;
         }
 
         .stats-board {
             width: 100%;
             text-align: left;
-            padding: 5px 10px;
+            padding: 8px;
             box-sizing: border-box;
-            font-size: 11px;
+            font-size: 10px;
             z-index: 2;
             display: none;
             background: rgba(0,0,0,0.3);
             border: 1px solid #222;
-            flex-grow: 1;
-            flex-direction: column;
-            justify-content: center;
+            margin-top: 4px;
         }
 
         .stats-header {
             color: var(--secondary);
             font-weight: bold;
-            font-size: 12px;
-            margin-bottom: 5px;
+            font-size: 11px;
+            margin-bottom: 4px;
             border-bottom: 1px dashed var(--secondary);
             padding-bottom: 2px;
         }
@@ -163,12 +196,20 @@
         .stat-mod.buff { color: var(--buff); }
         .stat-mod.nerf { color: var(--nerf); }
 
-        .links-container { display: flex; gap: 10px; opacity: 0; z-index: 10; margin-top: auto; padding-top: 10px; }
+        .links-container { 
+            display: flex; 
+            gap: 10px; 
+            opacity: 0; 
+            z-index: 10; 
+            margin-top: 10px; 
+            width: 100%; 
+            justify-content: center;
+        }
         .guide-link {
-            font-size: 10px;
+            font-size: 9px;
             color: #000;
             background: var(--secondary);
-            padding: 6px 10px;
+            padding: 6px 8px;
             text-decoration: none;
             font-weight: 900;
             clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
@@ -178,7 +219,7 @@
             background: var(--accent);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 12px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
             cursor: pointer;
@@ -186,6 +227,7 @@
             clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
             box-shadow: 0 4px 0 #80002a;
             margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .bonk-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #80002a; }
@@ -198,8 +240,10 @@
             font-family: 'JetBrains Mono', monospace;
             padding: 10px;
             cursor: pointer;
+            font-size: 12px;
         }
 
+        /* Animations */
         .do-flash { animation: flash-anim 0.5s ease-out forwards; }
         @keyframes flash-anim { 0% { opacity: 1; } 100% { opacity: 0; } }
         .glitch { animation: glitch-anim 0.1s infinite; }
@@ -208,13 +252,20 @@
             50% { transform: translate(-1px, 1px); }
             100% { transform: translate(0); }
         }
+
+        @media (max-height: 700px) {
+            .display-unit { min-height: 400px; }
+            .header-logo-container { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <div id="flash"></div>
 
-    <div class="terminal">
+    <div class="terminal" id="terminal-container">
+        <button class="fs-toggle" onclick="toggleFullScreen()">⛶</button>
+        
         <div class="header-logo-container">
             <img src="images/logo.png" alt="MEGABONK Logo" class="header-logo-img">
             <div class="header-subtitle">RANDOMIZER</div>
@@ -223,7 +274,22 @@
         <div class="display-unit" id="screen">
             <div class="img-frame"><img id="char-img" src="" style="display:none;"></div>
             <div id="char-name">UNIT_OFFLINE</div>
+            
+            <!-- New Info Blocks -->
+            <div id="weapon-block" class="info-block">
+                <span class="info-label">Primary Weapon</span>
+                <span id="weapon-name" class="info-title">---</span>
+                <span id="weapon-desc" class="info-desc">---</span>
+            </div>
+
+            <div id="passive-block" class="info-block">
+                <span class="info-label">Passive Ability</span>
+                <span id="passive-name" class="info-title">---</span>
+                <span id="passive-desc" class="info-desc">---</span>
+            </div>
+
             <div class="stats-board" id="stats-board"></div>
+            
             <div class="links-container" id="links">
                 <a id="yt-link" href="#" target="_blank" class="guide-link">YouTube Guide</a>
                 <a id="rd-link" href="#" target="_blank" class="guide-link">Reddit Intel</a>
@@ -238,36 +304,43 @@
 
     <script>
         const roster = [
-            { display: "Amog", file: "Amog", stats: [{name:"Max HP",base:"130",mod:"(+30)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Duration",base:"1.2x",mod:"(+0.2)"},{name:"Size",base:"1.2x",mod:"(+0.2)"},{name:"Armor",base:"10%",mod:"(10%)"}]},
-            { display: "Athena", file: "Athena", stats: [{name:"Max HP",base:"125",mod:"(+25)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"15%",mod:"(15%)"},{name:"Thorns",base:"5",mod:"(+5)"}]},
-            { display: "Bandit", file: "Bandit", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.05x",mod:"(5%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"11%",mod:"(10%)"}]},
-            { display: "Birdo", file: "Birdo", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.05x",mod:"(5%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Extra Jumps",base:"1",mod:"(+1)"}]},
-            { display: "Bush", file: "Bush", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"11",mod:"(+6)"},{name:"Evasion",base:"11%",mod:"(10%)"}]},
-            { display: "Calcium", file: "Calcium", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.15x",mod:"(15%)"},{name:"Jump",base:"9",mod:"(+1.5)"},{name:"Pickup",base:"8",mod:"(+3)"}]},
-            { display: "CL4NK", file: "CL4NK", stats: [{name:"Max HP",base:"40",mod:"(-60)"},{name:"Speed",base:"1.07x",mod:"(7%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Shield",base:"50",mod:"(+50)"}]},
-            { display: "Dicehead", file: "Dicehead", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Crit",base:"6%",mod:"(5%)"},{name:"Gold",base:"1.1x",mod:"(+0.1)"}]},
-            { display: "Fox", file: "fox", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(4%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Luck",base:"15%",mod:"(15%)"}]},
-            { display: "Megachad", file: "Megachad", stats: [{name:"Max HP",base:"120",mod:"(+20)"},{name:"Speed",base:"0.95x",mod:"(-5%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"5",mod:""}]},
-            { display: "Monke", file: "Monke", stats: [{name:"Max HP",base:"135",mod:"(+35)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"9",mod:"(+1)"},{name:"Pickup",base:"5",mod:""},{name:"Damage",base:"1.2x",mod:"(+0.2)"}]},
-            { display: "Ninja", file: "Ninja", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.15x",mod:"(15%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Evasion",base:"6%",mod:"(5%)"}]},
-            { display: "Noelle", file: "Noelle", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.08x",mod:"(+0.1)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"}]},
-            { display: "Ogre", file: "Ogre", stats: [{name:"Max HP",base:"140",mod:"(+40)"},{name:"Speed",base:"0.94x",mod:"(-6%)"},{name:"Jump",base:"7",mod:"(+0.4)"},{name:"Pickup",base:"5",mod:""},{name:"Damage",base:"1.1x",mod:"(10%)"},{name:"Luck",base:"-1%",mod:"(-1%)"},{name:"Armor",base:"5%",mod:"(5%)"}]},
-            { display: "Roberto", file: "Roberto", ext: ".png", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(4%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"16%",mod:"(15%)"}]},
-            { display: "Robinette", file: "Robinette", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.08x",mod:"(7.5%)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Gold",base:"1.1x",mod:"(+0.1)"}]},
-            { display: "Sir Chadwell", file: "SirChadwell", stats: [{name:"Max HP",base:"150",mod:"(+50)"},{name:"Speed",base:"0.97x",mod:"(-3%)"},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"20%",mod:"(20%)"},{name:"Difficulty",base:"10%",mod:"(10%)"}]},
-            { display: "Sir Oofie", file: "SirOofie", stats: [{name:"Max HP",base:"150",mod:"(+50)"},{name:"Speed",base:"0.98x",mod:"(-2%)"},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"15%",mod:"(15%)"}]},
-            { display: "Spaceman", file: "Spaceman", stats: [{name:"Max HP",base:"110",mod:"(+10)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"XP Gain",base:"1.1x",mod:"(+0.1)"}]},
-            { display: "Tony McZoom", file: "TonyMcZoom", stats: [{name:"Max HP",base:"70",mod:"(-30)"},{name:"Speed",base:"1.30x",mod:"(30%)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Shield",base:"10",mod:"(+10)"}]},
-            { display: "Vlad", file: "Vlad", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(+0)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Lifesteal",base:"5%",mod:"(5%)"}]}
+            { display: "Amog", file: "Amog", stats: [{name:"Max HP",base:"130",mod:"(+30)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Duration",base:"1.2x",mod:"(+0.2)"},{name:"Size",base:"1.2x",mod:"(+0.2)"},{name:"Armor",base:"10%",mod:"(10%)"}], weapon: "Poison Flask", w_desc: "Throws toxic flasks at enemies, dealing area-damage and poisoning them.", passive: "Plague", p_desc: "Posioned enemies explode on death, poisoning nearby enemies. Also gain 1% Poison Damage per level." },
+            { display: "Athena", file: "Athena", stats: [{name:"Max HP",base:"125",mod:"(+25)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"15%",mod:"(15%)"},{name:"Thorns",base:"5",mod:"(+5)"}], weapon: "Aegis", w_desc: "Blocks incoming attacks and sends out shockwaves", passive: "Lock in", p_desc: "Deal more damage on lower HP. Gain 2 Thorns per level." },
+            { display: "Bandit", file: "Bandit", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.05x",mod:"(5%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"11%",mod:"(10%)"}], weapon: "Dexecutioner", w_desc: "A piercing blade. Small chance to instantly execute an enemy.", passive: "Flowstate", p_desc: "Gain 1% Attack Speed per level." },
+            { display: "Birdo", file: "Birdo", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.05x",mod:"(5%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Extra Jumps",base:"1",mod:"(+1)"}], weapon: "Tornado", w_desc: "Sends out tornadoes, knocking enemies back", passive: "Float", p_desc: "Hold \"Jump\" to float in the air. Also gain 1% Airborne Damage per level." },
+            { display: "Bush", file: "Bush", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"11",mod:"(+6)"},{name:"Evasion",base:"11%",mod:"(10%)"}], weapon: "Sniper Rifle", w_desc: "Fires piercing bullets. Can be manually aimed.", passive: "Bullseye", p_desc: "Random enemies are marked. Also gain 1% Crit Damage per level." },
+            { display: "Calcium", file: "Calcium", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.15x",mod:"(15%)"},{name:"Jump",base:"9",mod:"(+1.5)"},{name:"Pickup",base:"8",mod:"(+3)"}], weapon: "Bone", w_desc: "Throws bones that bounce off enemies", passive: "Speed Demon", p_desc: "Speed builds up over time, but is halved when you take damage. Also gain damage based on speed." },
+            { display: "CL4NK", file: "CL4NK", stats: [{name:"Max HP",base:"40",mod:"(-60)"},{name:"Speed",base:"1.07x",mod:"(7%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Shield",base:"50",mod:"(+50)"}], weapon: "Revolver", w_desc: "Fires multiple bullets at enemies", passive: "Crit Happens", p_desc: "Gain 1% Crit Chance per level." },
+            { display: "Dicehead", file: "Dicehead", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Crit",base:"6%",mod:"(5%)"},{name:"Gold",base:"1.1x",mod:"(+0.1)"}], weapon: "Dice", w_desc: "Throw dice that deal 1-6 damage. Rolling a 6 increases the weapon's Crit Chance permanently.", passive: "Gamba", p_desc: "Roll the dice and upgrade a random stat when you level up!" },
+            { display: "Fox", file: "fox", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(4%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Luck",base:"15%",mod:"(15%)"}], weapon: "Firestaff", w_desc: "Shoots fireballs that explode on impact", passive: "RNG Blessing", p_desc: "Gain 1.5% Luck per level." },
+            { display: "Megachad", file: "Megachad", stats: [{name:"Max HP",base:"120",mod:"(+20)"},{name:"Speed",base:"0.95x",mod:"(-5%)"},{name:"Jump",base:"8",mod:"(+1)"},{name:"Pickup",base:"5",mod:""}], weapon: "Aura", w_desc: "Damage enemies in an area around you", passive: "Flex", p_desc: "Flex to stop damage. Cooldown -0.2s per level. Gain 2.5% Damage when flexing." },
+            { display: "Monke", file: "Monke", stats: [{name:"Max HP",base:"135",mod:"(+35)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"9",mod:"(+1)"},{name:"Pickup",base:"5",mod:""},{name:"Damage",base:"1.2x",mod:"(+0.2)"}], weapon: "Bananarang", w_desc: "Throws bananas that return to the owner", passive: "Monke Grip", p_desc: "Climb up walls. Also gain +2 Max HP per level." },
+            { display: "Ninja", file: "Ninja", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.15x",mod:"(15%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Evasion",base:"6%",mod:"(5%)"}], weapon: "Katana", w_desc: "A sharp blade that targets the closest enemy.", passive: "Shadowstep", p_desc: "Execute an enemy upon evading them. Also gain 0.5% Evasion per level." },
+            { display: "Noelle", file: "Noelle", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.08x",mod:"(+0.1)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"}], weapon: "Frostwalker", w_desc: "Freezes and damages enemies in an area around you", passive: "Enduring", p_desc: "Gain 0.75% Size per level. Also increase Damage per currently frozen enemy." },
+            { display: "Ogre", file: "Ogre", stats: [{name:"Max HP",base:"140",mod:"(+40)"},{name:"Speed",base:"0.94x",mod:"(-6%)"},{name:"Jump",base:"7",mod:"(+0.4)"},{name:"Pickup",base:"5",mod:""},{name:"Damage",base:"1.1x",mod:"(10%)"},{name:"Luck",base:"-1%",mod:"(-1%)"},{name:"Armor",base:"5%",mod:"(5%)"}], weapon: "Axe", w_desc: "Throws spinning axes that deal area-damage", passive: "Warrior", p_desc: "Gain 1.5% Damage per level." },
+            { display: "Roberto", file: "Roberto", ext: ".png", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(4%)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"9",mod:"(+4)"},{name:"Evasion",base:"16%",mod:"(15%)"}], weapon: "Scythe", w_desc: "Slash in a circle around you. Killing Elite Enemies charges a stronger attack.", passive: "Hoarder", p_desc: "Free chest every 60s, increasing to 120s over levels. He can also float (a little)." },
+            { display: "Robinette", file: "Robinette", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.08x",mod:"(7.5%)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Gold",base:"1.1x",mod:"(+0.1)"}], weapon: "Bow", w_desc: "Shoots arrows that pierce enemies", passive: "Stonks", p_desc: "Gain 1% Gold Gain per level. Also increase Damage slightly by total Gold in inventory." },
+            { display: "Sir Chadwell", file: "SirChadwell", stats: [{name:"Max HP",base:"150",mod:"(+50)"},{name:"Speed",base:"0.97x",mod:"(-3%)"},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"20%",mod:"(20%)"},{name:"Difficulty",base:"10%",mod:"(10%)"}], weapon: "Corrupted Sword", w_desc: "Slashes in both directions. Deals increased damage at low HP.", passive: "Curse", p_desc: "Gain 1% Difficulty per level." },
+            { display: "Sir Oofie", file: "SirOofie", stats: [{name:"Max HP",base:"150",mod:"(+50)"},{name:"Speed",base:"0.98x",mod:"(-2%)"},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"5",mod:""},{name:"Armor",base:"15%",mod:"(15%)"}], weapon: "Sword", w_desc: "Slashes through multiple enemies", passive: "Reinforced", p_desc: "Gain 1% Armor per level." },
+            { display: "Spaceman", file: "Spaceman", stats: [{name:"Max HP",base:"110",mod:"(+10)"},{name:"Speed",base:"1.00x",mod:""},{name:"Jump",base:"7",mod:""},{name:"Pickup",base:"10",mod:"(+5)"},{name:"XP Gain",base:"1.1x",mod:"(+0.1)"}], weapon: "Black Hole", w_desc: "Shoots a black hole that pulls enemies in.", passive: "Quantum XP Theory", p_desc: "Gain 1% XP Gain per level." },
+            { display: "Tony McZoom", file: "TonyMcZoom", stats: [{name:"Max HP",base:"70",mod:"(-30)"},{name:"Speed",base:"1.30x",mod:"(30%)"},{name:"Jump",base:"10",mod:"(+3)"},{name:"Pickup",base:"8",mod:"(+3)"},{name:"Shield",base:"10",mod:"(+10)"}], weapon: "Wireless Dagger", w_desc: "Throw smart daggers at your enemies. Wireless tech goes crazy these days.", passive: "Zap", p_desc: "Charge an electric attack by moving around. Gain 2% Pickup Range per level." },
+            { display: "Vlad", file: "Vlad", stats: [{name:"Max HP",base:"100",mod:""},{name:"Speed",base:"1.04x",mod:"(+0)"},{name:"Jump",base:"9",mod:"(+2)"},{name:"Pickup",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Lifesteal",base:"5%",mod:"(5%)"}], weapon: "Blood Magic", w_desc: "Summons blood magic. 5% chance to increase max HP upon killing enemies.", passive: "Vampire", p_desc: "Gain 1% Lifesteal per level." }
         ];
 
         const nameDisplay = document.getElementById('char-name');
         const imgDisplay = document.getElementById('char-img');
         const linksDiv = document.getElementById('links');
         const flashDiv = document.getElementById('flash');
-        const screen = document.getElementById('screen');
         const statsBoard = document.getElementById('stats-board');
         const manualSelect = document.getElementById('manual-select');
+        
+        const wBlock = document.getElementById('weapon-block');
+        const pBlock = document.getElementById('passive-block');
+        const wName = document.getElementById('weapon-name');
+        const wDesc = document.getElementById('weapon-desc');
+        const pName = document.getElementById('passive-name');
+        const pDesc = document.getElementById('passive-desc');
+
         let audioCtx = null;
         let isSpinning = false;
 
@@ -284,6 +357,16 @@
             finalize(roster[e.target.value]);
         });
 
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
         function playSound(freq, type, duration) {
@@ -299,7 +382,7 @@
         }
 
         function buildStatsHTML(statsArray) {
-            let html = '<div class="stats-header">Character stats</div>';
+            let html = '<div class="stats-header">SYSTEM_STATS</div>';
             statsArray.forEach(s => {
                 let modClass = s.mod.includes('-') ? 'nerf' : 'buff';
                 html += `<div class="stat-row">
@@ -320,6 +403,8 @@
             manualSelect.value = "";
             linksDiv.style.opacity = "0";
             statsBoard.style.display = "none";
+            wBlock.style.display = "none";
+            pBlock.style.display = "none";
             imgDisplay.style.display = "block";
             let counter = 0;
             const interval = setInterval(() => {
@@ -340,12 +425,23 @@
             nameDisplay.innerText = lockedUnit.display;
             imgDisplay.src = "images/" + lockedUnit.file + (lockedUnit.ext || ".webp");
             nameDisplay.classList.remove('glitch');
+            
+            // Populate Weapon/Passive
+            wName.innerText = lockedUnit.weapon;
+            wDesc.innerText = lockedUnit.w_desc;
+            pName.innerText = lockedUnit.passive;
+            pDesc.innerText = lockedUnit.p_desc;
+            wBlock.style.display = "block";
+            pBlock.style.display = "block";
+
             statsBoard.innerHTML = buildStatsHTML(lockedUnit.stats);
-            statsBoard.style.display = "flex";
+            statsBoard.style.display = "block";
+            
             flashDiv.classList.remove('do-flash');
             void flashDiv.offsetWidth;
             flashDiv.classList.add('do-flash');
             playSound(523, 'triangle', 0.2);
+            
             const searchTerms = encodeURIComponent(`megabonk ${lockedUnit.display} guide`);
             document.getElementById('yt-link').href = `https://www.youtube.com/results?search_query=${searchTerms}`;
             document.getElementById('rd-link').href = `https://www.reddit.com/search/?q=${searchTerms}`;
