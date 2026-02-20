@@ -84,7 +84,7 @@
 
         .display-unit {
             background: #050505;
-            height: 420px;
+            height: 455px; /* <--- ADJUST HEIGHT HERE: Increase if content cuts off, decrease if too tall for screen */
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -107,19 +107,6 @@
             pointer-events: none;
             z-index: 5;
         }
-
-        .scanner-bar {
-            width: 100%;
-            height: 2px;
-            background: rgba(0, 242, 255, 0.3);
-            position: absolute;
-            top: 0;
-            z-index: 4;
-            box-shadow: 0 0 10px var(--secondary);
-            animation: scan 4s linear infinite;
-        }
-
-        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
 
         .img-frame {
             height: 180px; /* Adjusted to fit stats better */
