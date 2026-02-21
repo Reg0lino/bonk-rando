@@ -231,22 +231,39 @@
             letter-spacing: 1px;
         }
 
-        /* Action Buttons */
+        /* Action Buttons Area */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
         .bonk-btn {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 15px 5px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
             cursor: pointer;
             width: 100%;
+            flex: 1;
             clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
             box-shadow: 0 4px 0 #80002a;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.2;
         }
-        .bonk-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #80002a; }
+        .bonk-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 transparent !important; }
+
+        /* Level Specific Colors */
+        .lvl-forest { background: #4caf50 !important; color: #050505 !important; box-shadow: 0 4px 0 #2e7d32 !important; }
+        .lvl-desert { background: #e6c27a !important; color: #050505 !important; box-shadow: 0 4px 0 #b38f4d !important; }
+        .lvl-graveyard { background: #2c2c35 !important; color: var(--secondary) !important; box-shadow: 0 4px 0 #15151a !important; }
 
         .dropdown-select {
             width: 100%;
@@ -344,7 +361,11 @@
             </div>
         </div>
 
-        <button class="bonk-btn" onclick="randomize()" title="Randomly choose character">ROLL</button>
+        <div class="action-row">
+            <button class="bonk-btn" onclick="randomize()" title="Randomly choose character">ROLL CHARACTER</button>
+            <button class="bonk-btn" id="level-btn" onclick="randomizeLevel()" title="Randomly choose level">ROLL LEVEL</button>
+        </div>
+        
         <select class="dropdown-select" id="manual-select">
             <option value="" selected disabled>Select Character</option>
         </select>
@@ -375,8 +396,17 @@
             { display: "Vlad", file: "Vlad", stats: [{name:"HP",base:"100",mod:""},{name:"Move Speed",base:"1.04x",mod:"(+0)"},{name:"Jump Height",base:"9",mod:"(+2)"},{name:"Pickup Range",base:"10",mod:"(+5)"},{name:"Evasion",base:"6%",mod:"(5%)"},{name:"Lifesteal",base:"5%",mod:"(5%)"}], weapon: "Blood Magic", w_desc: "Summons blood magic. 5% chance to increase max HP upon killing enemies.", passive: "Vampire", p_desc: "Gain 1% Lifesteal per level." }
         ];
 
+        // Level Randomizer Data
+        const levelRoster = [
+            { display: "FOREST", cssClass: "lvl-forest" },
+            { display: "DESERT", cssClass: "lvl-desert" },
+            { display: "GRAVEYARD", cssClass: "lvl-graveyard" }
+        ];
+
         let currentUnit = null;
         let isSpinning = false;
+        let isLevelSpinning = false;
+        
         const nameDisplay = document.getElementById('char-name');
         const imgDisplay = document.getElementById('char-img');
         const linksDiv = document.getElementById('links');
@@ -436,6 +466,39 @@
             return html;
         }
 
+        // LEVEL RANDOMIZER LOGIC
+        function randomizeLevel() {
+            if (isLevelSpinning) return;
+            initAudio();
+            isLevelSpinning = true;
+            
+            const levelBtn = document.getElementById('level-btn');
+            let counter = 0;
+            
+            const interval = setInterval(() => {
+                const randLvl = levelRoster[Math.floor(Math.random() * levelRoster.length)];
+                levelBtn.innerText = randLvl.display;
+                levelBtn.className = "bonk-btn glitch " + randLvl.cssClass;
+                
+                playSound(150 + (counter * 20), 'square', 0.05);
+                
+                if (++counter > 20) {
+                    clearInterval(interval);
+                    finalizeLevel(levelRoster[Math.floor(Math.random() * levelRoster.length)]);
+                }
+            }, 70);
+        }
+
+        function finalizeLevel(lockedLevel) {
+            const levelBtn = document.getElementById('level-btn');
+            levelBtn.innerText = lockedLevel.display;
+            levelBtn.className = "bonk-btn " + lockedLevel.cssClass;
+            
+            playSound(523, 'triangle', 0.2);
+            isLevelSpinning = false;
+        }
+
+        // CHARACTER RANDOMIZER LOGIC
         function randomize() {
             if (isSpinning) return;
             initAudio();
