@@ -260,10 +260,27 @@
         }
         .bonk-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 transparent !important; }
 
-        /* Level Specific Colors */
-        .lvl-forest { background: #4caf50 !important; color: #050505 !important; box-shadow: 0 4px 0 #2e7d32 !important; }
-        .lvl-desert { background: #e6c27a !important; color: #050505 !important; box-shadow: 0 4px 0 #b38f4d !important; }
-        .lvl-graveyard { background: #2c2c35 !important; color: var(--secondary) !important; box-shadow: 0 4px 0 #15151a !important; }
+        /* Level Specific Image Backgrounds */
+        .lvl-custom {
+            background-size: cover !important;
+            background-position: center !important;
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,1) !important;
+        }
+        
+        .lvl-forest { 
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/forest.jpg') !important; 
+            box-shadow: 0 4px 0 #1e5222 !important; 
+        }
+        .lvl-desert { 
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('images/desert.jpg') !important; 
+            box-shadow: 0 4px 0 #8a6c37 !important; 
+        }
+        .lvl-graveyard { 
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/graveyard.jpg') !important; 
+            box-shadow: 0 4px 0 #0a0a0c !important; 
+            color: var(--secondary) !important; /* Kept Graveyard neon blue for theme */
+        }
 
         .dropdown-select {
             width: 100%;
@@ -398,9 +415,9 @@
 
         // Level Randomizer Data
         const levelRoster = [
-            { display: "FOREST", cssClass: "lvl-forest" },
-            { display: "DESERT", cssClass: "lvl-desert" },
-            { display: "GRAVEYARD", cssClass: "lvl-graveyard" }
+            { display: "FOREST", cssClass: "lvl-custom lvl-forest" },
+            { display: "DESERT", cssClass: "lvl-custom lvl-desert" },
+            { display: "GRAVEYARD", cssClass: "lvl-custom lvl-graveyard" }
         ];
 
         let currentUnit = null;
